@@ -4,8 +4,11 @@ export default class Socket {
     socket = null;
     callbacks = {}
 
-    constructor(url) {
-        this.socket = new WebSocket(`${url}/socket.feli`);
+    constructor(url, params = {}) {
+        const send_params = new URLSearchParams(params);
+
+        this.socket = new WebSocket(`${url}/socket.feli?${send_params.toString()}`);
+        
 
         this.socket.onmessage = (event) => {
             const { nombre, params } = JSON.parse(event.data);

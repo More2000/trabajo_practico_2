@@ -12,7 +12,7 @@ const [getMessages, setMessages] = useState([])
 //LLAMAMOS UNA SOLA VEZ (useEffect) A -> SOCKET IO [CLIENTE]
 useEffect(() => {
   // DEFINIMOS SOCKET Y LE INDICAMOS LA URL DEL BACK
-  const socket = new Socket('ws://localhost:8000');
+  const socket = new Socket('ws://localhost:8000',{userid: 1});
 
   socket.on('connection', (socket) => {
     console.log("CONEE")
