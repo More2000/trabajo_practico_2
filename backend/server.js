@@ -73,9 +73,8 @@ app.post('/temperatura', async (req, res) => {
 app.get('/api/temperaturas', async (req, res) => {
     try {
       // OBTENEMOS TODAS LAS TEMPERATURAS DE LA DB (MONGODB)
-      //const result = await collection.find({}).toArray();
-      res.send("HOLAA")
-      //res.status(200).json(result);
+      const result = await collection.find({}).toArray();
+      res.status(200).json(result);
     } catch (error) {
       console.error('NO SE PUDO OBTENER TEMPERATURAS:', error);
       res.status(500).send('Error fetching data');
