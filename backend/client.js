@@ -5,6 +5,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import axios from 'axios';
+import WebSocket from 'ws';
 
 // HABILITAMOS EL .ENV
 import dotenv from 'dotenv';
@@ -22,15 +23,16 @@ const app = express();
 
 app.listen(PORT, () => {
     console.log('Servidor corriendo en el puerto ' + PORT);
-    const socket = new Socket(URL)
 
-    socket.on(`connection`, () => {
+    const socket = new Socket(URL)
+    socket.on(`connection`, (client) => {
+        console.log("Conectado a socket")
         setInterval ( () => {
             // CREA UNA TEMPERATURA ALEATORIA Y LA REDONDEA
             const temperatura = (Math.random() * (35.0 - 15.0) + 15.0).toFixed(1);
     
             // OBTIENE LA HORA DEL MOMENTO
-            const timestamp = Math.floor(Date.now() / 1000);
+            const timestamp = Date.now().toString();
         
             // JUNTA LAS DOS VARIABLES Y LA JUNTA EN DATA
             const data = { timestamp, temperatura };

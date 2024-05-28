@@ -31,10 +31,7 @@ app.use(bodyParser.json());
 
 // SETEAMOS LA BASE DE DATOS (MONGO)
 const client = new MongoClient(
-    uri, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true 
-    });
+    uri);
 // NOMBRE DE LA BASE DE DATOS [MONGODB]
 const db = client.db('trabajo_práctico_2');
 
@@ -43,7 +40,14 @@ const collection = db.collection('Redes y Comunicaciones');
 
 
 // NOS CONECTAMOS A LA BASE DE DATOS
-await client.connect();
+
+try {
+  await client.connect();
+
+}
+catch(er) {
+  console.log("ERROR AL CONECTAR A LA DB")
+}
 
 
 app.post('/temperatura', async (req, res) => {
@@ -69,8 +73,9 @@ app.post('/temperatura', async (req, res) => {
 app.get('/api/temperaturas', async (req, res) => {
     try {
       // OBTENEMOS TODAS LAS TEMPERATURAS DE LA DB (MONGODB)
-      const result = await collection.find({}).toArray();
-      res.status(200).json(result);
+      //const result = await collection.find({}).toArray();
+      res.send("HOLAA")
+      //res.status(200).json(result);
     } catch (error) {
       console.error('NO SE PUDO OBTENER TEMPERATURAS:', error);
       res.status(500).send('Error fetching data');

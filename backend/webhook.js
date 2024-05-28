@@ -18,6 +18,9 @@ const URL_SERVER = env.URL_SERVER;
 // LEVANTAMOS LA PÁGINA CON EXPRESS
 const app = express();
 
+app.use(cors())
+app.use(express.json())
+
 app.post('/webhook', async (req, res) => {
 
     const { timestamp, temperatura } = req.body;
