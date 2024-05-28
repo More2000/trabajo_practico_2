@@ -1,19 +1,15 @@
-// IMPORTAMOS SOCKET.IO
-const socketIo = require('socket.io');
-
 // IMPORTAMOS MONGODB
-const { MongoClient } = require("mongodb");
+import { MongoClient } from "mongodb";
 
 // DEMÁS IMPORTACIONES
-const express = require('express');
-const bodyParser = require('body-parser');
-const { Client } = require('pg');
-const cors = require('cors');
-const http = require('http');
-const axios = require('axios');
+import express from 'express';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import axios from 'axios';
 
 // HABILITAMOS EL .ENV
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
 // PROCESAMOS EL .ENV
 const env = process.env;
@@ -22,7 +18,7 @@ const env = process.env;
 const PORT = env.PORT_SERVER;
 
 // DEFINIMOS LA URI DE LA BASE DE DATOS
-const uri = process.env.MONGODB_URI;
+const uri = env.MONGODB_URI;
 
 // LEVANTAMOS LA PÁGINA CON EXPRESS
 const app = express();
@@ -33,42 +29,27 @@ app.use(cors());
 // PARSEAMOS LOS JSON QUE USE LA APP
 app.use(bodyParser.json());
 
-// SERVER =  DEFINIMOS SERVER A PARTIR DE EXPRESS
-const server = http.createServer(app);
-
-const io = socketIo(server);
-
 // SETEAMOS LA BASE DE DATOS (MONGO)
 const client = new MongoClient(
     uri, {
         useNewUrlParser: true,
         useUnifiedTopology: true 
     });
-    
-// NOS CONECTAMOS A LA BASE DE DATOS
-await client.connect();
-
 // NOMBRE DE LA BASE DE DATOS [MONGODB]
 const db = client.db('trabajo_práctico_2');
 
 // NOMBRE DE LA COLECCIÓN [MONGODB]
 const collection = db.collection('Redes y Comunicaciones');
 
-// ENVIAMOS LA TEMPERATURA
-io.on('connection', (socket) => {
-  // PALABRA CLAVE DEL EMIT = TEMPERATURA
-  socket.on('temperatura', async (data) => {
-    try {
-      // ENVIAMOS LOS DATOS AL WEBHOOK
-      await axios.post('http://localhost:3000/webhook', data);
-    } catch (error) {
-      console.error('No se pudo enviar data al webhook:', error);
-    }
-  });
-});
 
-app.post('/webhook', async (req, res) => {
+// NOS CONECTAMOS A LA BASE DE DATOS
+await client.connect();
+
+
+app.post('/temperatura', async (req, res) => {
+  
     const { timestamp, temperatura } = req.body;
+
     try {
       // INSERTAMOS LOS DATOS EN LA DB (MONGODB)
       const nuevoDocumento = {
@@ -97,6 +78,6 @@ app.get('/api/temperaturas', async (req, res) => {
 });
 
 
-server.listen(PORT_SERVER, () => {
-  console.log('Servidor corriendo en el puerto ' + PORT_SERVER);
+app.listen(PORT, () => {
+  console.log('Servidor corriendo en el puerto ' + PORT);
 });

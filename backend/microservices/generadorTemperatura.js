@@ -1,6 +1,3 @@
-// IMPORTAMOS SOCKET.IO CLIENT
-const io = require('socket.io-client');
-
 // DEMÁS IMPORTACIONES
 const express = require('express');
 const http = require('http');
@@ -17,9 +14,6 @@ const app = express();
 
 // LEVANTAMOS EL SERVER
 const server = http.createServer(app);
-
-// SE CONECTA A SERVER.JS
-const socket = io('http://localhost:7000');
 
 socket.on('connect', () => {
   setIntervalo(() => {

@@ -2,7 +2,7 @@
   "name": "trabajo_practico_2",
   "private": true,
   "version": "0.0.0",
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -17,6 +17,7 @@
     "http": "^0.0.1-security",
     "mongodb": "6.6",
     "path": "^0.12.7",
+    "pg": "^8.11.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "socket.io": "^4.7.5",
