@@ -6,10 +6,40 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import axios from 'axios';
-
 // HABILITAMOS EL .ENV
 import dotenv from 'dotenv';
 dotenv.config();
+
+
+// JWT
+import jwt from 'jsonwebtoken';
+const JWT_SECRET = process.env.JWT_SECRET;
+console.log(JWT_SECRET)
+
+//GENERA EL TOKEN
+const generateToken = (user) => {
+  return jwt.sign(user, JWT_SECRET, { expiresIn: '2h' });
+};
+
+// VERIFICA EL TOKEN
+const verifyToken = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Token no proporcionado' });
+  }
+
+  const token = authHeader.split(' ')[1];
+
+  jwt.verify(token, JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ error: 'Token inválido' });
+    }
+    req.user = decoded;
+    next();
+  });
+};
+
 
 // PROCESAMOS EL .ENV
 const env = process.env;
@@ -43,14 +73,31 @@ const collection = db.collection('Redes y Comunicaciones');
 
 try {
   await client.connect();
-
 }
 catch(er) {
   console.log("ERROR AL CONECTAR A LA DB")
 }
 
+app.post('/token', async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    if(
+      username == 'admin' && password == 'admin'
+    ){
+      const token = generateToken({username});
+      res.send(token);
+    }
+    else(
+      res.status(403).send('es admin xd')
+    )
+  } catch (error) {
+    console.error('ALGO SALIO MAL', error);
+  }
+});
 
-app.post('/temperatura', async (req, res) => {
+
+
+app.post('/temperatura', verifyToken, async (req, res) => {
   
     const { timestamp, temperatura } = req.body;
 
@@ -70,7 +117,7 @@ app.post('/temperatura', async (req, res) => {
     }
 });
 
-app.get('/api/temperaturas', async (req, res) => {
+app.get('/api/temperaturas', verifyToken, async (req, res) => {
     try {
       // OBTENEMOS TODAS LAS TEMPERATURAS DE LA DB (MONGODB)
       const result = await collection.find({}).toArray();
