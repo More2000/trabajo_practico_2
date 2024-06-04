@@ -1,42 +1,55 @@
-// IMPORTAMOS EL SOCKET DE FELI
-import Socket from "./components/Socket";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Line } from 'react-chartjs-2';
+import 'chart.js/auto';
 
-function App() {
-// INICIALIZAMOS CON USESTATE AL SOCKET
-const [getSocket, setSocket] = useState(null)
-const [getMessages, setMessages] = useState([])
+const App = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://your-api-endpoint.com/api/temperatures');
+        setData(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching data', error);
+        setLoading(false);
+      }
+    };
 
-//LLAMAMOS UNA SOLA VEZ (useEffect) A -> SOCKET.FELI
-useEffect(() => {
-  // DEFINIMOS SOCKET Y LE INDICAMOS LA URL DEL BACK
-  const socket = new Socket('ws://localhost:8000',{userid: 1});
+    fetchData();
+  }, []);
 
-  socket.on('connection', (socket) => {
-    console.log("CONEE")
-  })
-  socket.on('respuesta', (socket) => {
-    console.log("ress")
-  })
+  const formatDataForChart = () => {
+    const labels = data.map(entry => new Date(entry.timestamp).toLocaleString());
+    const temperatures = data.map(entry => entry.temperature);
 
-  // ¡SETEAMOS EL SOCKET!
-  setSocket(socket);
-}, []);
+    return {
+      labels,
+      datasets: [
+        {
+          label: 'Temperature over Time',
+          data: temperatures,
+          borderColor: 'rgba(75, 192, 192, 1)',
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          fill: true,
+        },
+      ],
+    };
+  };
 
-const handle = () => {
-  // EL EMIT TIENE QUE COINCIDIR EXACTO CON LA PALABRA PUESTA EN EL BACK
-  getSocket.emit("saludo", {nombre:'Felii'})
-}
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <>
-    {
-      getMessages.map((value, index) => <div key={index}>{value}</div>)
-    }
-      <button onClick={handle}>XD</button>
-    </>
-  )
-}
+    <div className="App">
+      <h1>Temperature Data</h1>
+      <Line data={formatDataForChart()} />
+    </div>
+  );
+};
 
-export default App
+export default App;

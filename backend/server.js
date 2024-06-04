@@ -6,6 +6,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import axios from 'axios';
+
 // HABILITAMOS EL .ENV
 import dotenv from 'dotenv';
 dotenv.config();
@@ -14,7 +15,6 @@ dotenv.config();
 // JWT
 import jwt from 'jsonwebtoken';
 const JWT_SECRET = process.env.JWT_SECRET;
-console.log(JWT_SECRET)
 
 //GENERA EL TOKEN
 const generateToken = (user) => {
@@ -60,17 +60,15 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // SETEAMOS LA BASE DE DATOS (MONGO)
-const client = new MongoClient(
-    uri);
+const client = new MongoClient(uri);
+
 // NOMBRE DE LA BASE DE DATOS [MONGODB]
 const db = client.db('trabajo_práctico_2');
 
 // NOMBRE DE LA COLECCIÓN [MONGODB]
 const collection = db.collection('Redes y Comunicaciones');
 
-
 // NOS CONECTAMOS A LA BASE DE DATOS
-
 try {
   await client.connect();
 }
