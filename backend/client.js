@@ -37,6 +37,8 @@ app.listen(PORT, () => {
             const data = { timestamp, temperatura };
         
             // PALABRA CLAVE DEL EMIT = TEMPERATURA
+            console.log("CREANDO TEMPERATURA")
+            console.log(data)
             socket.emit('temperatura', data);
   },5000)
         console.log("SE CONECTÓ A SOCKET")

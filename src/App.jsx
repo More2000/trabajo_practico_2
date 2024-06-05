@@ -30,6 +30,7 @@ const App = () => {
           });
           setData(response.data);
           setLoading(false);
+          console.log(response.data)
         } catch (error) {
           console.error('Error al traer temperaturas', error);
           setLoading(false);

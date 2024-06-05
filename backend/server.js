@@ -93,14 +93,20 @@ app.post('/token', async (req, res) => {
 
 
 
-app.post('/temperatura', verifyToken, async (req, res) => {
+app.post('/temperatura', async (req, res) => {
   
     const { timestamp, temperatura } = req.body;
 
     try {
       // INSERTAMOS LOS DATOS EN LA DB (MONGODB)
+      console.log("EL TIMESTAMP:")
+      console.log(timestamp)
+      const date = new Date(parseInt(timestamp));
+      //date.setTime(timestamp * 1000)
+      console.log(date)
+      console.log(date.toLocaleString())
       const nuevoDocumento = {
-        timestamp: new Date(timestamp),
+        timestamp: date.toLocaleString(),
         temperatura: temperatura
       };
 
@@ -115,6 +121,7 @@ app.post('/temperatura', verifyToken, async (req, res) => {
 
 app.get('/api/temperaturas', verifyToken, async (req, res) => {
     try {
+      //await collection.deleteMany({})
       // OBTENEMOS TODAS LAS TEMPERATURAS DE LA DB (MONGODB)
       const result = await collection.find({}).toArray();
       res.status(200).json(result);
