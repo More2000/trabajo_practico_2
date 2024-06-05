@@ -5,12 +5,13 @@ import { MongoClient } from "mongodb";
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import axios from 'axios';
 
 // HABILITAMOS EL .ENV
 import dotenv from 'dotenv';
 dotenv.config();
 
+// PROCESAMOS EL .ENV
+const env = process.env;
 
 // JWT
 import jwt from 'jsonwebtoken';
@@ -23,6 +24,7 @@ const generateToken = (user) => {
 
 // VERIFICA EL TOKEN
 const verifyToken = (req, res, next) => {
+
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -39,10 +41,6 @@ const verifyToken = (req, res, next) => {
     next();
   });
 };
-
-
-// PROCESAMOS EL .ENV
-const env = process.env;
 
 // DEFINIMOS EL PUERTO
 const PORT = env.PORT_SERVER;

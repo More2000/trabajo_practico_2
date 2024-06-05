@@ -1,8 +1,5 @@
-// DEMÁS IMPORTACIONES
+// IMPORTACIONES
 import express from 'express';
-import bodyParser from 'body-parser';
-import cors from 'cors';
-import axios from 'axios';
 import WebSocket from 'ws';
 
 // HABILITAMOS EL .ENV
@@ -14,11 +11,14 @@ const env = process.env;
 
 // DEFINIMOS EL PUERTO
 const PORT = env.PORT_CLIENT;
+
+// DEFINIMOS URL DEL SOCKET
 const URL = env.URL_SOCKET;
 
 // LEVANTAMOS LA PÁGINA CON EXPRESS
 const app = express();
 
+// INTERVALO DE GENERADOR DE TEMPERATURA
 app.listen(PORT, () => {
     console.log('Servidor corriendo en el puerto ' + PORT);
 
@@ -26,8 +26,9 @@ app.listen(PORT, () => {
     socket.on(`connection`, (client) => {
         console.log("Conectado a socket")
         setInterval ( () => {
+
             // CREA UNA TEMPERATURA ALEATORIA Y LA REDONDEA
-            const temperatura = (Math.random() * (35.0 - 15.0) + 15.0).toFixed(1);
+            const temperatura = (Math.random() * (50.0 - (-5.0)) + (-5.0)).toFixed(1);
     
             // OBTIENE LA HORA DEL MOMENTO
             const timestamp = Date.now().toString();
