@@ -42,4 +42,9 @@ export default class Socket {
         }
         this.callbacks[mensaje].push(callback);
     }
+    off(nombre) {
+        if(this.callbacks[nombre]) {
+            delete(this.callbacks[nombre])
+        }
+    }
 }

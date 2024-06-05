@@ -1,6 +1,7 @@
 // IMPORTACIONES 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Socket from './Socket';
 
 // IMPORTACIONES DE REACT CHARTJS2
 import { Line } from 'react-chartjs-2';
@@ -18,6 +19,25 @@ const App = () => {
   const [loading, setLoading] = useState(true);
 
   // CARGA DE DATOS
+
+  useEffect(() => {
+    const socket = new Socket('http://localhost:8000')
+
+    socket.on('connection', (feli) => {
+        console.log("SE CONECTO SOCKET")
+    })
+    socket.on('change_temperatura', (feli) => {
+        console.log(feli)
+        setData(i => [...i, {temperatura: feli.temperatura, timestamp: new Date(parseInt(feli.timestamp)).toLocaleString()}])
+        console.log("change temperatura")
+    });
+
+    return () => {
+        socket.off('change_temperatura')
+    }
+  }, [data])
+
+  
   useEffect(() => {
     const fetchData = async () => {
       if (token) {

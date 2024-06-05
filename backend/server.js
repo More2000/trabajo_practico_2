@@ -99,12 +99,9 @@ app.post('/temperatura', async (req, res) => {
 
     try {
       // INSERTAMOS LOS DATOS EN LA DB (MONGODB)
-      console.log("EL TIMESTAMP:")
-      console.log(timestamp)
+
       const date = new Date(parseInt(timestamp));
-      //date.setTime(timestamp * 1000)
-      console.log(date)
-      console.log(date.toLocaleString())
+
       const nuevoDocumento = {
         timestamp: date.toLocaleString(),
         temperatura: temperatura
