@@ -103,7 +103,7 @@ app.post('/temperatura', async (req, res) => {
       const date = new Date(parseInt(timestamp));
 
       const nuevoDocumento = {
-        timestamp: date.toLocaleString(),
+        timestamp: date,
         temperatura: temperatura
       };
 
