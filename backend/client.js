@@ -31,7 +31,13 @@ app.listen(PORT, () => {
             const temperatura = (Math.random() * (50.0 - (-5.0)) + (-5.0)).toFixed(1);
     
             // OBTIENE LA HORA DEL MOMENTO
-            const timestamp = Date.now().toString();
+            const now = new Date();
+
+            // RESTA 3 HORAS A LA HORA ACTUAL
+            now.setHours(now.getHours() - 3);
+
+            // HACEMOS EL TIMESTAMP CON LAS DOS COSAS ANTERIORES
+            const timestamp = now.getTime().toString();
         
             // JUNTA LAS DOS VARIABLES Y LA JUNTA EN DATA
             const data = { timestamp, temperatura };

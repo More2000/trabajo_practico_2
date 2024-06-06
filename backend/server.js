@@ -118,7 +118,6 @@ app.post('/temperatura', async (req, res) => {
 
 app.get('/api/temperaturas', verifyToken, async (req, res) => {
     try {
-      //await collection.deleteMany({})
       // OBTENEMOS TODAS LAS TEMPERATURAS DE LA DB (MONGODB)
       const result = await collection.find({}).toArray();
       res.status(200).json(result);

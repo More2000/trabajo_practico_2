@@ -18,14 +18,10 @@ const App = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // CARGA DE DATOS
-
+  //
   useEffect(() => {
-    const socket = new Socket('http://localhost:8000')
+    const socket = new Socket('http://localhost:8000')//ESTO NO IRIA ACA PERO BUENO JEJE
 
-    socket.on('connection', (feli) => {
-        console.log("SE CONECTO SOCKET")
-    })
     socket.on('change_temperatura', (feli) => {
         console.log(feli)
         setData(i => [...i, {temperatura: feli.temperatura, timestamp: new Date(parseInt(feli.timestamp)).toLocaleString()}])
@@ -37,7 +33,7 @@ const App = () => {
     }
   }, [data])
 
-  
+  // CARGAMOS LOS DATOS
   useEffect(() => {
     const fetchData = async () => {
       if (token) {
@@ -60,7 +56,7 @@ const App = () => {
     fetchData();
   }, [token]);
 
-  // GRÁFICO
+  // CREADOR DE GRÁFICA
   const formatDataForChart = () => {
     const labels = data.map(entry => new Date(entry.timestamp).toLocaleString());
     const temperaturas = data.map(entry => entry.temperatura);
